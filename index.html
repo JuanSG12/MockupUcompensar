@@ -1,0 +1,1597 @@
+<title>Ucompensar — Mockup Rediseño</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;700;800;900&family=Open+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================
+   DESIGN TOKENS — Paleta propuesta (Teoría del color aplicada)
+   Armonía complementaria: Azul marino + Naranja
+   Análogo secundario: Verde teal
+============================================================ */
+:root {
+  /* Primario: Azul marino — confianza, academia, solidez */
+  --c-primary:      #1B3A6B;
+  --c-primary-mid:  #2554A0;
+  --c-primary-dark: #0F2447;
+
+  /* Acento: Naranja — complementario al azul, energía, innovación */
+  --c-accent:       #E85D04;
+  --c-accent-light: #FB923C;
+
+  /* Secundario: Verde teal — análogo al azul, tecnología, crecimiento */
+  --c-teal:         #0F766E;
+  --c-teal-light:   #14B8A6;
+
+  /* Neutros */
+  --c-bg:           #F4F7FC;
+  --c-surface:      #FFFFFF;
+  --c-surface-2:    #EDF1F8;
+  --c-text:         #111827;
+  --c-text-muted:   #6B7280;
+  --c-border:       #D1D5DB;
+
+  /* Color original para referencia comparativa */
+  --c-original:     #6B2D8B;
+
+  /* Tipografía */
+  --f-head: 'Raleway', system-ui, sans-serif;
+  --f-body: 'Open Sans', system-ui, sans-serif;
+
+  --nav-h:  70px;
+  --top-h:  36px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --c-bg:        #0C1829;
+    --c-surface:   #111E35;
+    --c-surface-2: #182844;
+    --c-text:      #E5EAF2;
+    --c-text-muted:#9CA3AF;
+    --c-border:    #253348;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --c-bg:        #0C1829;
+  --c-surface:   #111E35;
+  --c-surface-2: #182844;
+  --c-text:      #E5EAF2;
+  --c-text-muted:#9CA3AF;
+  --c-border:    #253348;
+  color-scheme: dark;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; }
+
+body {
+  font-family: var(--f-body);
+  background: var(--c-bg);
+  color: var(--c-text);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+/* TYPE SCALE */
+h1 { font-family: var(--f-head); font-size: clamp(26px, 5vw, 46px); font-weight: 800; text-wrap: balance; line-height: 1.15; }
+h2 { font-family: var(--f-head); font-size: clamp(20px, 3.5vw, 32px); font-weight: 700; text-wrap: balance; line-height: 1.2; }
+h3 { font-family: var(--f-head); font-size: clamp(16px, 2.5vw, 20px); font-weight: 700; }
+h4 { font-family: var(--f-head); font-size: 15px; font-weight: 700; }
+
+/* UTILITIES */
+.container { max-width: 1180px; margin-inline: auto; padding-inline: 20px; }
+.eyebrow   { font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--c-accent); }
+
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--c-accent); color: #fff;
+  padding: 11px 24px; font-family: var(--f-head); font-size: 14px; font-weight: 700;
+  border: none; cursor: pointer; text-decoration: none;
+  transition: background .2s, transform .15s;
+}
+.btn-primary:hover { background: var(--c-accent-light); transform: translateY(-1px); }
+
+.btn-outline {
+  display: inline-flex; align-items: center; gap: 8px;
+  border: 2px solid var(--c-primary); color: var(--c-primary);
+  padding: 10px 24px; font-family: var(--f-head); font-size: 14px; font-weight: 700;
+  background: transparent; cursor: pointer; text-decoration: none; transition: all .2s;
+}
+.btn-outline:hover { background: var(--c-primary); color: #fff; }
+
+.btn-white {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: #fff; color: var(--c-primary);
+  padding: 11px 26px; font-family: var(--f-head); font-size: 14px; font-weight: 700;
+  border: none; cursor: pointer; text-decoration: none; transition: all .2s;
+}
+.btn-white:hover { background: var(--c-accent); color: #fff; }
+
+/* ============================================================
+   TOP BAR
+============================================================ */
+.top-bar {
+  background: var(--c-primary-dark);
+  color: rgba(255,255,255,.7);
+  font-size: 12px; height: var(--top-h);
+  display: flex; align-items: center;
+}
+.top-bar .container { display: flex; align-items: center; justify-content: space-between; }
+.top-bar a { color: inherit; text-decoration: none; transition: color .15s; }
+.top-bar a:hover { color: #fff; }
+.top-bar-left, .top-bar-right { display: flex; align-items: center; gap: 16px; }
+.btn-login {
+  background: var(--c-accent); color: #fff !important;
+  padding: 4px 14px; font-size: 11px; font-weight: 700;
+  letter-spacing: .06em; text-transform: uppercase;
+}
+
+/* ============================================================
+   NAVIGATION
+============================================================ */
+.main-nav {
+  position: sticky; top: 0; z-index: 100;
+  background: var(--c-surface); border-bottom: 1px solid var(--c-border);
+  height: var(--nav-h); display: flex; align-items: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,.06);
+}
+.nav-inner {
+  display: flex; align-items: center; justify-content: space-between;
+  width: 100%; max-width: 1180px; margin-inline: auto; padding-inline: 20px;
+}
+
+.logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+.logo-mark {
+  width: 42px; height: 42px; background: var(--c-primary);
+  display: grid; place-items: center; position: relative; overflow: hidden; flex-shrink: 0;
+}
+.logo-mark::after {
+  content: ''; position: absolute; bottom: -8px; right: -8px;
+  width: 18px; height: 18px; background: var(--c-accent);
+}
+.logo-mark span { font-family: var(--f-head); font-weight: 900; font-size: 17px; color: white; position: relative; z-index: 1; }
+.logo-text strong { display: block; color: var(--c-primary); font-family: var(--f-head); font-weight: 800; font-size: 16px; line-height: 1.1; }
+.logo-text small  { color: var(--c-text-muted); font-size: 9px; letter-spacing: .08em; text-transform: uppercase; }
+
+.nav-menu { display: flex; align-items: center; gap: 0; list-style: none; padding: 0; }
+.nav-menu li { position: relative; }
+.nav-menu a {
+  display: flex; align-items: center; gap: 4px;
+  padding: 0 14px; height: var(--nav-h);
+  text-decoration: none; color: var(--c-text);
+  font-family: var(--f-head); font-size: 13px; font-weight: 600;
+  border-bottom: 3px solid transparent; transition: all .2s;
+}
+.nav-menu a:hover, .nav-menu a.active { color: var(--c-primary); border-bottom-color: var(--c-accent); }
+.nav-cta a { height: auto; padding: 10px 18px; border-bottom: none !important; border: none; margin-left: 8px; }
+
+.nav-dropdown {
+  position: absolute; top: 100%; left: 0; min-width: 220px;
+  background: var(--c-surface); border: 1px solid var(--c-border);
+  box-shadow: 0 8px 24px rgba(0,0,0,.12);
+  opacity: 0; visibility: hidden; transform: translateY(8px); transition: all .2s; z-index: 200;
+}
+.nav-menu li:hover .nav-dropdown { opacity: 1; visibility: visible; transform: translateY(0); }
+.nav-dropdown a {
+  height: auto; padding: 10px 16px; border-bottom: 1px solid var(--c-border); border-left: none;
+  font-size: 13px; color: var(--c-text-muted); display: block;
+}
+.nav-dropdown li:last-child a { border-bottom: none; }
+.nav-dropdown a:hover { color: var(--c-primary); background: var(--c-surface-2); padding-left: 22px; }
+
+.nav-toggle { display: none; background: none; border: none; cursor: pointer; padding: 8px; }
+.nav-toggle span { display: block; width: 22px; height: 2px; background: var(--c-text); margin: 5px 0; transition: all .2s; }
+
+/* THEME TOGGLE */
+.theme-toggle {
+  display: flex; align-items: center; justify-content: center;
+  width: 32px; height: 32px; background: var(--c-surface-2);
+  border: 1px solid var(--c-border); cursor: pointer; font-size: 15px;
+  transition: background .15s; flex-shrink: 0;
+}
+.theme-toggle:hover { background: var(--c-border); }
+
+/* ============================================================
+   PAGES
+============================================================ */
+.page { display: none; }
+.page.active { display: block; }
+
+/* ============================================================
+   HOME — HERO
+============================================================ */
+.hero {
+  background: var(--c-primary);
+  position: relative; overflow: hidden;
+  padding-block: 72px 56px;
+  min-height: 500px; display: flex; align-items: center;
+}
+.hero::before {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(145deg, #0F2447 0%, var(--c-primary) 50%, #1a4a8a 100%);
+}
+.hero-geo {
+  position: absolute; right: -80px; top: -80px;
+  width: 480px; height: 480px;
+  border-radius: 50%; border: 90px solid rgba(255,255,255,.04);
+}
+.hero-geo-2 {
+  position: absolute; right: 80px; bottom: -100px;
+  width: 220px; height: 220px;
+  background: var(--c-accent); opacity: .12; transform: rotate(45deg);
+}
+.hero-geo-3 {
+  position: absolute; left: -40px; bottom: 20px;
+  width: 160px; height: 160px;
+  background: var(--c-teal); opacity: .1; transform: rotate(20deg);
+}
+.hero-content { position: relative; z-index: 1; max-width: 620px; }
+.hero-tag {
+  display: inline-block; background: var(--c-accent); color: white;
+  font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+  padding: 5px 12px; margin-bottom: 18px;
+}
+.hero h1 { color: white; margin-bottom: 14px; }
+.hero-lead { color: rgba(255,255,255,.8); font-size: 16px; margin-bottom: 26px; max-width: 480px; }
+.hero-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+.hero-search {
+  margin-top: 32px; display: flex; max-width: 460px;
+  background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.2);
+}
+.hero-search input {
+  flex: 1; padding: 12px 16px; background: transparent; border: none;
+  color: white; font-family: var(--f-body); font-size: 14px; outline: none;
+}
+.hero-search input::placeholder { color: rgba(255,255,255,.45); }
+.hero-search button {
+  background: var(--c-accent); color: white; border: none;
+  padding: 12px 18px; cursor: pointer; font-weight: 700; font-size: 13px; transition: background .2s;
+}
+.hero-search button:hover { background: #c94d02; }
+.hero-stats {
+  display: flex; gap: 32px; margin-top: 36px; padding-top: 28px;
+  border-top: 1px solid rgba(255,255,255,.14); flex-wrap: wrap;
+}
+.hero-stat strong {
+  display: block; font-family: var(--f-head); font-size: 26px; font-weight: 800;
+  color: white; font-variant-numeric: tabular-nums; line-height: 1.1;
+}
+.hero-stat .plus { color: var(--c-accent); }
+.hero-stat small { font-size: 11px; color: rgba(255,255,255,.6); letter-spacing: .03em; }
+
+/* QUICK ACCESS */
+.quick-access { background: var(--c-surface); border-bottom: 1px solid var(--c-border); }
+.quick-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+}
+.quick-item {
+  display: flex; align-items: center; gap: 14px;
+  padding: 18px 22px; border-right: 1px solid var(--c-border);
+  text-decoration: none; color: var(--c-text); transition: background .15s;
+}
+.quick-item:last-child { border-right: none; }
+.quick-item:hover { background: var(--c-surface-2); }
+.quick-icon {
+  width: 38px; height: 38px; background: var(--c-primary);
+  display: grid; place-items: center; flex-shrink: 0; font-size: 17px;
+}
+.quick-lbl { font-family: var(--f-head); font-size: 12px; font-weight: 700; line-height: 1.3; }
+.quick-sub { font-size: 11px; color: var(--c-text-muted); }
+
+/* ============================================================
+   COLOR THEORY PANEL
+============================================================ */
+.color-panel {
+  margin-block: 28px;
+  border: 2px solid var(--c-accent);
+  background: #FFF8F0;
+  padding: 24px;
+}
+:root[data-theme="dark"] .color-panel,
+@media (prefers-color-scheme: dark) { .color-panel { background: #241408; } }
+.color-panel h3 { color: var(--c-accent); margin-bottom: 6px; font-size: 16px; }
+.color-panel p  { font-size: 13px; color: var(--c-text-muted); line-height: 1.7; margin-bottom: 16px; }
+.swatches { display: flex; gap: 12px; flex-wrap: wrap; }
+.swatch-g { flex: 1; min-width: 140px; }
+.swatch-lbl { font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--c-text-muted); margin-bottom: 6px; }
+.swatch { display: flex; align-items: center; gap: 10px; }
+.swatch-dot { width: 34px; height: 34px; flex-shrink: 0; border: 1px solid rgba(0,0,0,.12); }
+.swatch-name { font-size: 12px; font-weight: 700; }
+.swatch-hex  { font-size: 11px; color: var(--c-text-muted); font-variant-numeric: tabular-nums; }
+.color-theory-note {
+  margin-top: 14px; font-size: 12px; color: var(--c-text-muted);
+  border-top: 1px solid var(--c-border); padding-top: 12px;
+  display: flex; gap: 20px; flex-wrap: wrap;
+}
+.theory-tag { display: flex; align-items: center; gap: 6px; }
+.theory-tag-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+/* ============================================================
+   SECTIONS
+============================================================ */
+.section { padding-block: 56px; }
+.section-header { margin-bottom: 32px; }
+.section-header h2 { margin-top: 6px; }
+
+/* PROGRAM CARDS */
+.programs-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+
+.program-card {
+  background: var(--c-surface); border: 1px solid var(--c-border);
+  overflow: hidden; display: flex; flex-direction: column;
+  border-top: 4px solid var(--c-primary);
+  cursor: pointer; transition: box-shadow .2s, transform .2s;
+}
+.program-card:hover { box-shadow: 0 8px 32px rgba(0,0,0,.11); transform: translateY(-3px); }
+.program-card.card-accent { border-top-color: var(--c-accent); }
+.program-card.card-teal   { border-top-color: var(--c-teal); }
+
+.prog-img {
+  height: 130px; display: flex; align-items: center; justify-content: center;
+  font-size: 48px; position: relative; overflow: hidden;
+}
+.prog-body { padding: 18px; flex: 1; display: flex; flex-direction: column; }
+.prog-level { font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--c-text-muted); margin-bottom: 5px; }
+.program-card h3 { font-size: 15px; margin-bottom: 8px; line-height: 1.35; }
+.program-card p  { font-size: 13px; color: var(--c-text-muted); flex: 1; }
+.prog-meta {
+  margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--c-border);
+  display: flex; justify-content: space-between; align-items: center;
+}
+.prog-badge { font-size: 11px; padding: 3px 10px; font-weight: 600; background: var(--c-surface-2); color: var(--c-primary); border: 1px solid var(--c-border); }
+.prog-link  { font-size: 13px; font-weight: 700; color: var(--c-accent); text-decoration: none; }
+.prog-link:hover { text-decoration: underline; }
+
+/* STATS BAND */
+.stats-band { background: var(--c-primary); padding-block: 56px; }
+.stats-grid  { display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; text-align: center; }
+.stat-num {
+  font-family: var(--f-head); font-size: 42px; font-weight: 900;
+  color: white; font-variant-numeric: tabular-nums; line-height: 1; display: block;
+}
+.stat-accent { color: var(--c-accent); }
+.stat-lbl { color: rgba(255,255,255,.65); font-size: 13px; margin-top: 6px; }
+
+/* NEWS */
+.news-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.news-featured { background: var(--c-surface); border: 1px solid var(--c-border); display: flex; flex-direction: column; }
+.news-img {
+  height: 210px; background: var(--c-primary);
+  display: flex; align-items: flex-end; padding: 20px; position: relative;
+}
+.news-img::before {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(11,25,60,.88) 30%, transparent);
+}
+.news-img-title {
+  position: relative; z-index: 1;
+  font-family: var(--f-head); font-size: 17px; font-weight: 700; color: white; line-height: 1.35;
+}
+.news-body { padding: 18px; flex: 1; }
+.news-tag { font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--c-accent); margin-bottom: 8px; display: block; }
+.news-body p { font-size: 13px; color: var(--c-text-muted); }
+.news-list { display: flex; flex-direction: column; gap: 0; }
+.news-item {
+  background: var(--c-surface); border: 1px solid var(--c-border); border-top: none;
+  padding: 14px 18px; display: flex; gap: 14px; align-items: flex-start;
+  cursor: pointer; transition: background .15s;
+}
+.news-item:first-child { border-top: 1px solid var(--c-border); }
+.news-item:hover { background: var(--c-surface-2); }
+.news-date {
+  flex-shrink: 0; width: 48px; background: var(--c-primary);
+  color: white; padding: 6px 8px; text-align: center;
+}
+.news-date strong { display: block; font-size: 19px; font-weight: 800; line-height: 1; }
+.news-date small  { font-size: 9px; letter-spacing: .05em; text-transform: uppercase; }
+.news-item h4 { font-size: 13px; margin-bottom: 3px; line-height: 1.4; }
+.news-item p  { font-size: 12px; color: var(--c-text-muted); }
+
+/* ============================================================
+   PAGE HEADER (interior pages)
+============================================================ */
+.page-hero { background: var(--c-surface-2); border-bottom: 1px solid var(--c-border); padding-block: 36px 28px; }
+.breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--c-text-muted); margin-bottom: 12px; }
+.breadcrumb a { color: var(--c-primary); text-decoration: none; }
+
+/* FILTERS */
+.filters-bar { background: var(--c-surface); border-bottom: 1px solid var(--c-border); padding-block: 12px; position: sticky; top: var(--nav-h); z-index: 50; }
+.filters-inner { display: flex; gap: 8px; flex-wrap: wrap; }
+.filter-chip {
+  padding: 5px 16px; font-size: 12px; font-weight: 600;
+  border: 1px solid var(--c-border); background: transparent; color: var(--c-text-muted);
+  cursor: pointer; transition: all .15s; font-family: var(--f-body); border-radius: 20px;
+}
+.filter-chip:hover  { border-color: var(--c-primary); color: var(--c-primary); }
+.filter-chip.active { background: var(--c-primary); color: white; border-color: var(--c-primary); }
+
+.programs-all-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 28px; }
+
+/* ============================================================
+   SOFTWARE ENGINEERING PROGRAM PAGE
+============================================================ */
+.prog-hero {
+  background: var(--c-primary);
+  padding-block: 56px 0; position: relative; overflow: hidden;
+}
+.prog-hero::after {
+  content: '< />';
+  position: absolute; right: 40px; top: 50%; transform: translateY(-55%);
+  font-family: var(--f-head); font-size: 110px; font-weight: 900;
+  color: rgba(255,255,255,.05); letter-spacing: -4px; white-space: nowrap;
+  pointer-events: none;
+}
+.prog-hero-inner { position: relative; z-index: 1; }
+.prog-hero h1    { color: white; margin-bottom: 10px; }
+.prog-sub        { color: rgba(255,255,255,.8); font-size: 16px; max-width: 540px; margin-bottom: 24px; }
+.prog-chips      { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 28px; }
+.prog-chip {
+  padding: 5px 13px; font-size: 12px; font-weight: 600;
+  background: rgba(255,255,255,.1); color: rgba(255,255,255,.88);
+  border: 1px solid rgba(255,255,255,.2);
+}
+.prog-kpis {
+  display: flex; flex-wrap: wrap;
+  background: rgba(0,0,0,.2); border-top: 1px solid rgba(255,255,255,.1);
+  margin-top: 8px;
+}
+.prog-kpi {
+  flex: 1; min-width: 130px; padding: 14px 22px; text-align: center;
+  border-right: 1px solid rgba(255,255,255,.1);
+}
+.prog-kpi:last-child { border-right: none; }
+.prog-kpi strong { display: block; font-family: var(--f-head); font-size: 19px; font-weight: 800; color: white; }
+.prog-kpi small  { font-size: 10px; color: rgba(255,255,255,.55); text-transform: uppercase; letter-spacing: .06em; }
+
+/* TABS */
+.prog-tabs-bar { background: var(--c-surface); border-bottom: 1px solid var(--c-border); position: sticky; top: var(--nav-h); z-index: 50; }
+.prog-tabs     { display: flex; overflow-x: auto; }
+.prog-tab {
+  padding: 15px 22px; font-family: var(--f-head); font-size: 13px; font-weight: 600;
+  color: var(--c-text-muted); border-bottom: 3px solid transparent;
+  cursor: pointer; background: none; border-top: none; border-left: none; border-right: none;
+  white-space: nowrap; transition: all .15s;
+}
+.prog-tab:hover  { color: var(--c-primary); }
+.prog-tab.active { color: var(--c-primary); border-bottom-color: var(--c-accent); }
+
+.prog-panel { display: none; padding-block: 44px; }
+.prog-panel.active { display: block; }
+
+/* CONTENT LAYOUTS */
+.two-col   { display: grid; grid-template-columns: 1fr 1fr; gap: 36px; align-items: start; }
+.three-col { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+
+.info-block { margin-bottom: 28px; }
+.info-block h3 { margin-bottom: 10px; padding-bottom: 8px; border-bottom: 2px solid var(--c-accent); display: inline-block; font-size: 17px; }
+.info-block p  { font-size: 14px; color: var(--c-text-muted); line-height: 1.75; }
+.info-list     { list-style: none; padding: 0; }
+.info-list li  {
+  font-size: 14px; color: var(--c-text-muted); padding: 8px 0;
+  border-bottom: 1px solid var(--c-border);
+  display: flex; align-items: flex-start; gap: 10px;
+}
+.info-list li::before { content: '→'; color: var(--c-accent); flex-shrink: 0; margin-top: 1px; }
+.info-list li:last-child { border-bottom: none; }
+
+/* COMPETENCY CARDS */
+.comp-card { background: var(--c-surface); border: 1px solid var(--c-border); padding: 18px; border-top: 3px solid var(--c-teal); }
+.comp-card h4 { margin-bottom: 7px; font-size: 14px; color: var(--c-teal); }
+.comp-card p  { font-size: 13px; color: var(--c-text-muted); }
+
+/* PENSUM */
+.semester { background: var(--c-surface); border: 1px solid var(--c-border); margin-bottom: 10px; }
+.sem-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 16px; background: var(--c-surface-2); cursor: pointer;
+  border-bottom: 1px solid var(--c-border); user-select: none;
+}
+.sem-header h4 { font-size: 13px; margin: 0; }
+.sem-credits   { font-size: 12px; color: var(--c-text-muted); font-weight: 600; }
+.sem-body      { }
+.subject {
+  display: flex; align-items: center; padding: 9px 16px;
+  border-bottom: 1px solid var(--c-border); font-size: 13px; gap: 10px;
+}
+.subject:last-child { border-bottom: none; }
+.subject-name    { flex: 1; }
+.subject-credits { width: 48px; text-align: right; font-variant-numeric: tabular-nums; font-size: 12px; font-weight: 600; color: var(--c-text-muted); }
+.sub-type { font-size: 10px; padding: 2px 8px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; }
+.type-ob { background: #EFF6FF; color: #1D4ED8; }
+.type-el { background: #F0FDF4; color: #15803D; }
+
+/* ADMISSION STEPS */
+.adm-step { display: flex; gap: 18px; padding: 18px 0; border-bottom: 1px solid var(--c-border); }
+.adm-step:last-child { border-bottom: none; }
+.step-num {
+  width: 38px; height: 38px; background: var(--c-primary); color: white;
+  display: grid; place-items: center;
+  font-family: var(--f-head); font-weight: 800; font-size: 17px; flex-shrink: 0;
+}
+.adm-step h4 { margin-bottom: 4px; }
+.adm-step p  { font-size: 14px; color: var(--c-text-muted); }
+
+/* CTA BLOCK */
+.cta-block {
+  background: var(--c-primary); padding: 36px; margin-top: 36px;
+  display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap;
+}
+.cta-block h3 { color: white; font-size: 20px; margin-bottom: 5px; }
+.cta-block p  { color: rgba(255,255,255,.7); font-size: 14px; }
+
+/* INFO BOX */
+.info-box { background: var(--c-surface); border: 1px solid var(--c-border); padding: 22px; }
+.info-box h4 { font-family: var(--f-head); margin-bottom: 14px; }
+.doc-list { list-style: none; padding: 0; }
+.doc-list li {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 0; border-bottom: 1px solid var(--c-border); font-size: 14px;
+}
+.doc-list li:last-child { border-bottom: none; }
+.doc-check { color: var(--c-teal); font-size: 15px; flex-shrink: 0; }
+
+.dates-box { background: var(--c-primary); padding: 22px; }
+.dates-box h4 { color: white; font-family: var(--f-head); margin-bottom: 14px; }
+.date-row {
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 13px; border-bottom: 1px solid rgba(255,255,255,.12); padding-block: 10px;
+}
+.date-row:last-child { border-bottom: none; }
+.date-lbl   { color: rgba(255,255,255,.7); }
+.date-val   { color: white; font-weight: 700; font-family: var(--f-head); }
+.date-val.highlight { color: var(--c-accent); }
+
+/* PROF AREA TAGS */
+.area-tag { display: flex; align-items: center; gap: 10px; font-size: 14px; margin-bottom: 10px; }
+.area-dot  { width: 9px; height: 9px; flex-shrink: 0; }
+
+/* ============================================================
+   FOOTER
+============================================================ */
+.footer { background: #0F2447; color: rgba(255,255,255,.7); padding-block: 44px 20px; }
+.footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 36px; margin-bottom: 36px; }
+.footer h4 {
+  color: white; font-family: var(--f-head); font-size: 12px;
+  font-weight: 700; letter-spacing: .07em; text-transform: uppercase; margin-bottom: 14px;
+}
+.footer ul { list-style: none; padding: 0; }
+.footer li a { color: rgba(255,255,255,.55); text-decoration: none; font-size: 13px; display: block; padding: 3px 0; transition: color .15s; }
+.footer li a:hover { color: var(--c-accent); }
+.footer-about p { font-size: 13px; color: rgba(255,255,255,.55); line-height: 1.7; margin-top: 10px; }
+.footer-mock-note { font-size: 11px; color: var(--c-accent); font-weight: 700; letter-spacing: .05em; text-transform: uppercase; margin-top: 14px; }
+.footer-bottom {
+  border-top: 1px solid rgba(255,255,255,.1); padding-top: 18px;
+  display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;
+  font-size: 11px; color: rgba(255,255,255,.35);
+}
+.social-links { display: flex; gap: 8px; margin-top: 14px; }
+.social-btn {
+  width: 30px; height: 30px; background: rgba(255,255,255,.08);
+  display: grid; place-items: center; color: rgba(255,255,255,.55);
+  font-size: 11px; font-weight: 700; text-decoration: none;
+  transition: background .15s;
+}
+.social-btn:hover { background: var(--c-accent); color: white; }
+
+/* ============================================================
+   RESPONSIVE
+============================================================ */
+@media (max-width: 960px) {
+  .programs-grid, .programs-all-grid, .three-col { grid-template-columns: 1fr 1fr; }
+  .stats-grid  { grid-template-columns: repeat(2, 1fr); }
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+  .news-grid   { grid-template-columns: 1fr; }
+  .two-col     { grid-template-columns: 1fr; }
+  .quick-grid  { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 640px) {
+  :root { --nav-h: 58px; }
+  .top-bar-left { display: none; }
+  .nav-menu {
+    display: none; position: fixed; left: 0; right: 0;
+    top: calc(var(--top-h) + var(--nav-h));
+    bottom: 0; background: var(--c-surface);
+    flex-direction: column; padding: 16px 20px;
+    border-top: 1px solid var(--c-border);
+    gap: 0; overflow-y: auto; z-index: 99;
+  }
+  .nav-menu.open { display: flex; }
+  .nav-menu a    { height: auto; padding: 13px 0; border-bottom: 1px solid var(--c-border); border-left: none; justify-content: space-between; width: 100%; }
+  .nav-dropdown  { display: none; }
+  .nav-cta a     { margin: 12px 0 0; padding: 12px 20px; justify-content: center; }
+  .nav-toggle    { display: block; }
+  .programs-grid, .programs-all-grid, .three-col { grid-template-columns: 1fr; }
+  .stats-grid    { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+  .footer-grid   { grid-template-columns: 1fr; }
+  .prog-hero::after { display: none; }
+  .prog-kpis     { grid-template-columns: repeat(2, 1fr); display: grid; }
+  .prog-kpi      { border-right: none; border-bottom: 1px solid rgba(255,255,255,.1); }
+  .cta-block     { text-align: center; justify-content: center; }
+  .hero-search   { max-width: 100%; }
+  .hero-stats    { gap: 18px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+}
+</style>
+
+<!-- ========================================
+     TOP BAR
+======================================== -->
+<div class="top-bar">
+  <div class="container">
+    <div class="top-bar-left">
+      <span>(+571) 744 7272</span>
+      <span>contacto@ucompensar.edu.co</span>
+      <span>Bogotá D.C., Colombia</span>
+    </div>
+    <div class="top-bar-right">
+      <a href="#">Portal Estudiantes</a>
+      <a href="#">Egresados</a>
+      <a href="#" class="btn-login">Ingresar</a>
+    </div>
+  </div>
+</div>
+
+<!-- ========================================
+     NAVIGATION
+======================================== -->
+<nav class="main-nav" role="navigation">
+  <div class="nav-inner">
+    <a href="#" class="logo" onclick="showPage('home'); return false;">
+      <div class="logo-mark"><span>U</span></div>
+      <div class="logo-text">
+        <strong>UCOMPENSAR</strong>
+        <small>Fundación Universitaria</small>
+      </div>
+    </a>
+
+    <button class="nav-toggle" id="navToggle" aria-label="Abrir menú" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+
+    <ul class="nav-menu" id="navMenu" role="list">
+      <li><a href="#" onclick="showPage('home'); return false;" id="nav-home" class="active">Inicio</a></li>
+      <li>
+        <a href="#" onclick="showPage('programas'); return false;" id="nav-programas">Programas ▾</a>
+        <ul class="nav-dropdown" role="list">
+          <li><a href="#">Pregrado</a></li>
+          <li><a href="#">Tecnologías</a></li>
+          <li><a href="#">Posgrados</a></li>
+          <li><a href="#">Educación Continua</a></li>
+          <li><a href="#" onclick="showPage('software'); return false;">Ing. Software Virtual</a></li>
+        </ul>
+      </li>
+      <li><a href="#">Investigación</a></li>
+      <li><a href="#">Bienestar</a></li>
+      <li><a href="#">Internacional</a></li>
+      <li>
+        <a href="#" onclick="showPage('software'); return false;" id="nav-software">Ing. Software</a>
+      </li>
+      <li class="nav-cta">
+        <a href="#" class="btn-primary">Inscríbete</a>
+      </li>
+      <li style="display:flex;align-items:center;margin-left:8px">
+        <button class="theme-toggle" id="themeToggle" aria-label="Cambiar tema" title="Modo claro/oscuro">🌙</button>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ======================================================
+     PAGE: HOME
+====================================================== -->
+<div class="page active" id="page-home">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-geo"></div>
+    <div class="hero-geo-2"></div>
+    <div class="hero-geo-3"></div>
+    <div class="container">
+      <div class="hero-content">
+        <span class="hero-tag">Formación con propósito</span>
+        <h1>Educación que<br>transforma vidas</h1>
+        <p class="hero-lead">Más de 40 años formando profesionales íntegros, innovadores y comprometidos con el desarrollo de Colombia.</p>
+        <div class="hero-actions">
+          <a href="#" class="btn-white" onclick="showPage('programas'); return false;">Explorar programas</a>
+          <a href="#" class="btn-primary">Inscríbete 2025-2</a>
+        </div>
+        <div class="hero-search" role="search">
+          <input type="text" placeholder="Busca tu programa académico..." aria-label="Buscar programa">
+          <button type="button">Buscar</button>
+        </div>
+        <div class="hero-stats">
+          <div class="hero-stat">
+            <strong>40<span class="plus">+</span></strong>
+            <small>Años de trayectoria</small>
+          </div>
+          <div class="hero-stat">
+            <strong>60<span class="plus">+</span></strong>
+            <small>Programas académicos</small>
+          </div>
+          <div class="hero-stat">
+            <strong>25K<span class="plus">+</span></strong>
+            <small>Estudiantes activos</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUICK ACCESS -->
+  <div class="quick-access">
+    <div class="container">
+      <div class="quick-grid">
+        <a href="#" class="quick-item" onclick="showPage('programas'); return false;">
+          <div class="quick-icon">🎓</div>
+          <div><div class="quick-lbl">Oferta académica</div><div class="quick-sub">Pregrado y posgrado</div></div>
+        </a>
+        <a href="#" class="quick-item">
+          <div class="quick-icon">📅</div>
+          <div><div class="quick-lbl">Admisiones 2025-2</div><div class="quick-sub">Fechas e inscripciones</div></div>
+        </a>
+        <a href="#" class="quick-item">
+          <div class="quick-icon" style="background:var(--c-teal)">🔬</div>
+          <div><div class="quick-lbl">Investigación</div><div class="quick-sub">Grupos y semilleros</div></div>
+        </a>
+        <a href="#" class="quick-item">
+          <div class="quick-icon" style="background:var(--c-accent)">💼</div>
+          <div><div class="quick-lbl">Bienestar universitario</div><div class="quick-sub">Servicios y apoyos</div></div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- COLOR THEORY PROPOSAL -->
+  <div class="container">
+    <div class="color-panel">
+      <h3>Propuesta de Rediseño de Identidad Visual — Teoría del Color</h3>
+      <p>
+        Este mockup aplica principios de <strong>teoría del color</strong> para modernizar la marca Ucompensar.
+        Se propone reemplazar el violeta institucional (#6B2D8B) por una paleta basada en
+        <strong>armonía complementaria</strong>: el azul marino profundo como color primario transmite
+        confianza, solidez y tradición académica; el naranja cálido como acento complementario (opuesto en la
+        rueda cromática) aporta energía, innovación y llamado a la acción. El verde teal actúa como análogo al azul,
+        simbolizando tecnología y crecimiento.
+      </p>
+      <div class="swatches">
+        <div class="swatch-g">
+          <div class="swatch-lbl">Color original</div>
+          <div class="swatch">
+            <div class="swatch-dot" style="background:#6B2D8B"></div>
+            <div>
+              <div class="swatch-name">Violeta institucional</div>
+              <div class="swatch-hex">#6B2D8B</div>
+            </div>
+          </div>
+        </div>
+        <div class="swatch-g">
+          <div class="swatch-lbl">Nuevo primario</div>
+          <div class="swatch">
+            <div class="swatch-dot" style="background:#1B3A6B"></div>
+            <div>
+              <div class="swatch-name">Azul marino profundo</div>
+              <div class="swatch-hex">#1B3A6B — Confianza</div>
+            </div>
+          </div>
+        </div>
+        <div class="swatch-g">
+          <div class="swatch-lbl">Acento complementario</div>
+          <div class="swatch">
+            <div class="swatch-dot" style="background:#E85D04"></div>
+            <div>
+              <div class="swatch-name">Naranja energético</div>
+              <div class="swatch-hex">#E85D04 — Innovación</div>
+            </div>
+          </div>
+        </div>
+        <div class="swatch-g">
+          <div class="swatch-lbl">Secundario análogo</div>
+          <div class="swatch">
+            <div class="swatch-dot" style="background:#0F766E"></div>
+            <div>
+              <div class="swatch-name">Verde teal</div>
+              <div class="swatch-hex">#0F766E — Tecnología</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="color-theory-note">
+        <div class="theory-tag">
+          <div class="theory-tag-dot" style="background:#1B3A6B"></div>
+          <span><strong>Primario:</strong> Azul navy — domina la jerarquía visual, fondos, nav y headers</span>
+        </div>
+        <div class="theory-tag">
+          <div class="theory-tag-dot" style="background:#E85D04"></div>
+          <span><strong>Acento:</strong> Naranja complementario — CTAs, destacados, alertas de acción</span>
+        </div>
+        <div class="theory-tag">
+          <div class="theory-tag-dot" style="background:#0F766E"></div>
+          <span><strong>Análogo:</strong> Verde teal — competencias STEM, iconos tecnológicos, éxito</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FEATURED PROGRAMS -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <p class="eyebrow">Oferta académica</p>
+        <h2>Programas destacados</h2>
+      </div>
+      <div class="programs-grid">
+
+        <div class="program-card card-accent" onclick="showPage('software')" tabindex="0" role="button" aria-label="Ver Ingeniería de Software">
+          <div class="prog-img" style="background:linear-gradient(135deg,#1B3A6B 0%,#0F766E 100%)">💻</div>
+          <div class="prog-body">
+            <div class="prog-level">Ingeniería · Virtual</div>
+            <h3>Ingeniería de Software</h3>
+            <p>Diseño, desarrollo y gestión de sistemas de software con perfil tecnológico y empresarial. 100% virtual.</p>
+            <div class="prog-meta">
+              <span class="prog-badge">Virtual · 8 sem.</span>
+              <a href="#" class="prog-link" onclick="showPage('software'); return false;">Ver programa →</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="program-card">
+          <div class="prog-img" style="background:linear-gradient(135deg,#1B3A6B 0%,#2554A0 100%)">📊</div>
+          <div class="prog-body">
+            <div class="prog-level">Administración · Presencial</div>
+            <h3>Administración de Empresas</h3>
+            <p>Gestión estratégica, liderazgo y toma de decisiones en entornos competitivos y cambiantes.</p>
+            <div class="prog-meta">
+              <span class="prog-badge">Presencial · 8 sem.</span>
+              <a href="#" class="prog-link">Ver programa →</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="program-card card-teal">
+          <div class="prog-img" style="background:linear-gradient(135deg,#0F766E 0%,#14B8A6 100%)">⚕️</div>
+          <div class="prog-body">
+            <div class="prog-level">Salud · Presencial</div>
+            <h3>Fisioterapia</h3>
+            <p>Rehabilitación integral del movimiento humano con énfasis en actividad física y calidad de vida.</p>
+            <div class="prog-meta">
+              <span class="prog-badge">Presencial · 10 sem.</span>
+              <a href="#" class="prog-link">Ver programa →</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div style="text-align:center;margin-top:28px">
+        <a href="#" class="btn-outline" onclick="showPage('programas'); return false;">Ver todos los programas</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS BAND -->
+  <section class="stats-band">
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-num">25<span class="stat-accent">K</span></span>
+          <p class="stat-lbl">Estudiantes activos en todos los programas</p>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num">60<span class="stat-accent">+</span></span>
+          <p class="stat-lbl">Programas en modalidades presencial y virtual</p>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num">98<span class="stat-accent">%</span></span>
+          <p class="stat-lbl">Empleabilidad de nuestros egresados</p>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num">40<span class="stat-accent">+</span></span>
+          <p class="stat-lbl">Años formando profesionales en Colombia</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- NEWS -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <p class="eyebrow">Actualidad</p>
+        <h2>Noticias y eventos</h2>
+      </div>
+      <div class="news-grid">
+        <div class="news-featured">
+          <div class="news-img" style="background:linear-gradient(135deg, var(--c-primary), var(--c-teal))">
+            <div class="news-img-title">Ucompensar recibe acreditación de alta calidad del MEN para dos programas</div>
+          </div>
+          <div class="news-body">
+            <span class="news-tag">Institucional</span>
+            <p>El Ministerio de Educación Nacional otorgó la acreditación de alta calidad a los programas de Fisioterapia y Administración de Empresas, reafirmando el compromiso de Ucompensar con la excelencia académica. Esta distinción posiciona a la institución entre las mejores del país.</p>
+            <a href="#" class="prog-link" style="display:inline-flex;margin-top:14px;align-items:center;gap:6px">Leer nota completa →</a>
+          </div>
+        </div>
+
+        <div class="news-list">
+          <div class="news-item">
+            <div class="news-date"><strong>15</strong><small>Sep</small></div>
+            <div>
+              <h4>Apertura de semillero de Inteligencia Artificial en Ing. Software</h4>
+              <p>Convocatoria abierta para nuevos integrantes del semillero de IA y Machine Learning.</p>
+            </div>
+          </div>
+          <div class="news-item">
+            <div class="news-date" style="background:var(--c-accent)"><strong>10</strong><small>Sep</small></div>
+            <div>
+              <h4>Feria de empleo virtual: conecta con más de 50 empresas tech</h4>
+              <p>La bolsa de empleo Ucompensar organiza su feria anual en modalidad 100% virtual.</p>
+            </div>
+          </div>
+          <div class="news-item">
+            <div class="news-date" style="background:var(--c-teal)"><strong>05</strong><small>Sep</small></div>
+            <div>
+              <h4>Nuevas becas Compensar para programas virtuales 2025-2</h4>
+              <p>Becas del 50% disponibles para programas virtuales. Aplica antes del 20 de septiembre.</p>
+            </div>
+          </div>
+          <div class="news-item">
+            <div class="news-date"><strong>28</strong><small>Ago</small></div>
+            <div>
+              <h4>Hackathon Ucompensar 2025: innovación tecnológica estudiantil</h4>
+              <p>Inscripciones abiertas. Premios de hasta $15 millones de pesos en producto y mentoría.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div><!-- /page-home -->
+
+<!-- ======================================================
+     PAGE: PROGRAMAS
+====================================================== -->
+<div class="page" id="page-programas">
+  <div class="page-hero">
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="#" onclick="showPage('home'); return false;">Inicio</a>
+        <span>›</span>
+        <span>Programas académicos</span>
+      </div>
+      <p class="eyebrow">Oferta académica</p>
+      <h1>Nuestros programas</h1>
+      <p style="color:var(--c-text-muted);font-size:15px;max-width:520px;margin-top:6px">Más de 60 programas en modalidad presencial, virtual y semipresencial diseñados para transformar tu futuro.</p>
+    </div>
+  </div>
+
+  <div class="filters-bar">
+    <div class="container">
+      <div class="filters-inner">
+        <button class="filter-chip active" onclick="filterPrograms(this,'all')">Todos</button>
+        <button class="filter-chip" onclick="filterPrograms(this,'pregrado')">Pregrado</button>
+        <button class="filter-chip" onclick="filterPrograms(this,'tecnologia')">Tecnologías</button>
+        <button class="filter-chip" onclick="filterPrograms(this,'posgrado')">Posgrado</button>
+        <button class="filter-chip" onclick="filterPrograms(this,'virtual')">Virtual</button>
+        <button class="filter-chip" onclick="filterPrograms(this,'presencial')">Presencial</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="programs-all-grid" id="allPrograms">
+
+      <div class="program-card card-accent" data-cat="pregrado virtual" onclick="showPage('software')" tabindex="0" role="button">
+        <div class="prog-img" style="background:linear-gradient(135deg,#1B3A6B,#0F766E)">💻</div>
+        <div class="prog-body">
+          <div class="prog-level">Pregrado · Virtual</div>
+          <h3>Ingeniería de Software</h3>
+          <p>Diseño, desarrollo y gestión de sistemas de software con perfil tech y empresarial.</p>
+          <div class="prog-meta"><span class="prog-badge">8 semestres</span><a href="#" class="prog-link" onclick="showPage('software'); return false;">Ver →</a></div>
+        </div>
+      </div>
+
+      <div class="program-card" data-cat="pregrado presencial">
+        <div class="prog-img" style="background:linear-gradient(135deg,#1B3A6B,#2554A0)">📊</div>
+        <div class="prog-body">
+          <div class="prog-level">Pregrado · Presencial</div>
+          <h3>Administración de Empresas</h3>
+          <p>Gestión estratégica y liderazgo organizacional con énfasis en innovación.</p>
+          <div class="prog-meta"><span class="prog-badge">8 semestres</span><a href="#" class="prog-link">Ver →</a></div>
+        </div>
+      </div>
+
+      <div class="program-card card-teal" data-cat="pregrado presencial">
+        <div class="prog-img" style="background:linear-gradient(135deg,#0F766E,#14B8A6)">⚕️</div>
+        <div class="prog-body">
+          <div class="prog-level">Pregrado · Presencial</div>
+          <h3>Fisioterapia</h3>
+          <p>Rehabilitación integral y promoción del movimiento humano saludable.</p>
+          <div class="prog-meta"><span class="prog-badge">10 semestres</span><a href="#" class="prog-link">Ver →</a></div>
+        </div>
+      </div>
+
+      <div class="program-card" data-cat="pregrado presencial">
+        <div class="prog-img" style="background:linear-gradient(135deg,#374151,#6B7280)">⚖️</div>
+        <div class="prog-body">
+          <div class="prog-level">Pregrado · Presencial</div>
+          <h3>Derecho</h3>
+          <p>Formación jurídica integral con énfasis en derechos humanos y derecho empresarial.</p>
+          <div class="prog-meta"><span class="prog-badge">10 semestres</span><a href="#" class="prog-link">Ver →</a></div>
+        </div>
+      </div>
+
+      <div class="program-card" data-cat="tecnologia virtual">
+        <div class="prog-img" style="background:linear-gradient(135deg,#7C3AED,#A78BFA)">🛡️</div>
+        <div class="prog-body">
+          <div class="prog-level">Tecnología · Virtual</div>
+          <h3>Tecnología en Sistemas</h3>
+          <p>Desarrollo de aplicaciones, redes y soporte tecnológico empresarial.</p>
+          <div class="prog-meta"><span class="prog-badge">6 semestres</span><a href="#" class="prog-link">Ver →</a></div>
+        </div>
+      </div>
+
+      <div class="program-card" data-cat="posgrado presencial">
+        <div class="prog-img" style="background:linear-gradient(135deg,#92400E,#D97706)">🏆</div>
+        <div class="prog-body">
+          <div class="prog-level">Especialización · Presencial</div>
+          <h3>Gerencia de Proyectos</h3>
+          <p>Metodologías ágiles y tradicionales para dirigir proyectos organizacionales con éxito.</p>
+          <div class="prog-meta"><span class="prog-badge">2 semestres</span><a href="#" class="prog-link">Ver →</a></div>
+        </div>
+      </div>
+
+      <div class="program-card" data-cat="pregrado presencial">
+        <div class="prog-img" style="background:linear-gradient(135deg,#065F46,#059669)">🧬</div>
+        <div class="prog-body">
+          <div class="prog-level">Pregrado · Presencial</div>
+          <h3>Nutrición y Dietética</h3>
+          <p>Ciencia de la alimentación aplicada a la salud individual y colectiva.</p>
+          <div class="prog-meta"><span class="prog-badge">9 semestres</span><a href="#" class="prog-link">Ver →</a></div>
+        </div>
+      </div>
+
+      <div class="program-card" data-cat="posgrado virtual">
+        <div class="prog-img" style="background:linear-gradient(135deg,#1B3A6B,#E85D04)">📈</div>
+        <div class="prog-body">
+          <div class="prog-level">Especialización · Virtual</div>
+          <h3>Gerencia Financiera</h3>
+          <p>Análisis, planeación y control financiero para la toma de decisiones empresariales.</p>
+          <div class="prog-meta"><span class="prog-badge">2 semestres</span><a href="#" class="prog-link">Ver →</a></div>
+        </div>
+      </div>
+
+      <div class="program-card card-teal" data-cat="tecnologia presencial">
+        <div class="prog-img" style="background:linear-gradient(135deg,#0F766E,#1B3A6B)">🎨</div>
+        <div class="prog-body">
+          <div class="prog-level">Tecnología · Presencial</div>
+          <h3>Diseño Gráfico</h3>
+          <p>Comunicación visual, identidad de marca y diseño digital para medios contemporáneos.</p>
+          <div class="prog-meta"><span class="prog-badge">6 semestres</span><a href="#" class="prog-link">Ver →</a></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <div style="height:56px"></div>
+</div><!-- /page-programas -->
+
+<!-- ======================================================
+     PAGE: INGENIERÍA DE SOFTWARE VIRTUAL
+====================================================== -->
+<div class="page" id="page-software">
+
+  <!-- PROGRAM HERO -->
+  <div class="prog-hero">
+    <div class="container">
+      <div class="prog-hero-inner">
+        <div class="breadcrumb" style="color:rgba(255,255,255,.5)">
+          <a href="#" onclick="showPage('home'); return false;" style="color:rgba(255,255,255,.6)">Inicio</a>
+          <span>›</span>
+          <a href="#" onclick="showPage('programas'); return false;" style="color:rgba(255,255,255,.6)">Programas</a>
+          <span>›</span>
+          <span style="color:rgba(255,255,255,.85)">Ingeniería de Software Virtual</span>
+        </div>
+        <h1>Ingeniería de Software<br>Virtual</h1>
+        <p class="prog-sub">Forma tu perfil como ingeniero de software con habilidades técnicas avanzadas, visión empresarial y liderazgo en entornos digitales globales.</p>
+        <div class="prog-chips">
+          <span class="prog-chip">100% Virtual</span>
+          <span class="prog-chip">8 Semestres</span>
+          <span class="prog-chip">Registro SNIES 107785</span>
+          <span class="prog-chip">Alta Calidad MEN</span>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <a href="#" class="btn-white">Inscríbete ahora</a>
+          <a href="#" class="btn-primary">Solicitar información</a>
+        </div>
+      </div>
+      <div class="prog-kpis">
+        <div class="prog-kpi"><strong>8</strong><small>Semestres</small></div>
+        <div class="prog-kpi"><strong>148</strong><small>Créditos</small></div>
+        <div class="prog-kpi"><strong>Virtual</strong><small>Modalidad</small></div>
+        <div class="prog-kpi"><strong>Diurna / Nocturna</strong><small>Jornada</small></div>
+        <div class="prog-kpi"><strong style="color:var(--c-accent)">2025-2</strong><small>Próxima cohorte</small></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TABS BAR -->
+  <div class="prog-tabs-bar">
+    <div class="container">
+      <div class="prog-tabs" role="tablist">
+        <button class="prog-tab active" role="tab" onclick="showTab(this,'descripcion')">Descripción</button>
+        <button class="prog-tab" role="tab" onclick="showTab(this,'pensum')">Plan de estudios</button>
+        <button class="prog-tab" role="tab" onclick="showTab(this,'perfil')">Perfil y competencias</button>
+        <button class="prog-tab" role="tab" onclick="showTab(this,'admisiones')">Admisiones</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: DESCRIPCIÓN -->
+  <div class="prog-panel active container" id="panel-descripcion">
+    <div class="two-col">
+      <div>
+        <div class="info-block">
+          <h3>Sobre el programa</h3>
+          <p>El programa de Ingeniería de Software Virtual de la Fundación Universitaria Compensar forma profesionales con sólidas competencias en el diseño, desarrollo, implementación y mantenimiento de sistemas de software de alta calidad. La modalidad virtual permite combinar el estudio con la vida laboral, accediendo a contenido de clase mundial desde cualquier lugar de Colombia.</p>
+          <br>
+          <p>La propuesta curricular integra las mejores prácticas de la industria tecnológica con una base matemática sólida y pensamiento computacional, preparando ingenieros capaces de responder a los retos del mercado digital global.</p>
+        </div>
+        <div class="info-block">
+          <h3>Objetivos</h3>
+          <ul class="info-list">
+            <li>Dominio de lenguajes de programación modernos y paradigmas de desarrollo</li>
+            <li>Análisis, diseño y arquitectura de sistemas de información escalables</li>
+            <li>Aplicar metodologías ágiles (Scrum, Kanban) en entornos reales</li>
+            <li>Gestionar proyectos tecnológicos con visión empresarial</li>
+            <li>Fomentar la investigación aplicada y la innovación tecnológica</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <div class="info-block">
+          <h3>¿Por qué elegir este programa?</h3>
+          <ul class="info-list">
+            <li>Docentes con experiencia en la industria tech colombiana e internacional</li>
+            <li>Laboratorios virtuales con herramientas profesionales (AWS, GitHub, Figma)</li>
+            <li>Alianzas con empresas del sector tecnológico para prácticas</li>
+            <li>Opción de doble titulación con universidades internacionales</li>
+            <li>Red de egresados en más de 20 países</li>
+            <li>Énfasis en IA, Cloud Computing y Ciberseguridad</li>
+          </ul>
+        </div>
+        <div style="background:var(--c-surface-2);border:1px solid var(--c-border);padding:20px">
+          <h4 style="margin-bottom:14px">Áreas de profundización</h4>
+          <div class="area-tag"><div class="area-dot" style="background:var(--c-accent)"></div>Desarrollo web y móvil full-stack</div>
+          <div class="area-tag"><div class="area-dot" style="background:var(--c-teal)"></div>Inteligencia Artificial y Machine Learning</div>
+          <div class="area-tag"><div class="area-dot" style="background:var(--c-primary)"></div>Cloud Computing y DevOps</div>
+          <div class="area-tag"><div class="area-dot" style="background:#7C3AED"></div>Ciberseguridad y protección de datos</div>
+        </div>
+      </div>
+    </div>
+    <div class="cta-block">
+      <div>
+        <h3>¿Listo para dar el primer paso?</h3>
+        <p>Período de inscripciones abierto — cohorte 2025-2. Cupos limitados.</p>
+      </div>
+      <a href="#" class="btn-white">Inscríbete ahora</a>
+    </div>
+  </div><!-- /panel-descripcion -->
+
+  <!-- TAB: PENSUM -->
+  <div class="prog-panel container" id="panel-pensum">
+    <div class="section-header">
+      <p class="eyebrow">Estructura curricular</p>
+      <h2>Plan de estudios</h2>
+      <p style="color:var(--c-text-muted);font-size:14px">148 créditos académicos distribuidos en 8 semestres</p>
+    </div>
+
+    <div class="semester">
+      <div class="sem-header" onclick="toggleSem(this)">
+        <h4>Semestre I — Fundamentos de Ingeniería</h4>
+        <span class="sem-credits">17 créditos ▾</span>
+      </div>
+      <div class="sem-body">
+        <div class="subject"><span class="subject-name">Cálculo Diferencial</span><span class="sub-type type-ob">Obligatoria</span><span class="subject-credits">4 cr</span></div>
+        <div class="subject"><span class="subject-name">Álgebra Lineal</span><span class="sub-type type-ob">Obligatoria</span><span class="subject-credits">3 cr</span></div>
+        <div class="subject"><span class="subject-name">Fundamentos de Programación</span><span class="sub-type type-ob">Obligatoria</span><span class="subject-credits">4 cr</span></div>
+        <div class="subject"><span class="subject-name">Lógica Matemática</span><span class="sub-type type-ob">Obligatoria</span><span class="subject-credits">3 cr</span></div>
+        <div class="subject"><span class="subject-name">Comunicación Efectiva</span><span class="sub-type type-ob">Obligatoria</span><span class="subject-credits">3 cr</span></div>
+      </div>
+    </div>
+
+    <div class="semester">
+      <div class="sem-header" onclick="toggleSem(this)">
+        <h4>Semestre II — Programación Avanzada</h4>
+        <span class="sem-credits">18 créditos ▾</span>
+      </div>
+      <div class="sem-body">
+        <div class="subject"><span class="subject-name">Programación Orientada a Objetos</span><span class="sub-type type-ob">Obligatoria</span><span class="subject-credits">4 cr</span></div>
+        <div class="subject"><span class="subject-name">Cálculo Integral</span><span class="sub-type type-ob">Obligatoria</span><span class="subject-credits">4 cr</span></div>
+        <div class="subject"><span class="subject-name">Estructuras de Datos</span><span class="sub-type type-ob">Obligatoria</span><span class="subject-credits">4 cr</span></div>
+        <div class="subject"><span class="subject-name">Bases de Datos I</span><span class="sub-type type-ob">Obligatoria</span><span class="subject-credits">3 cr</span></div>
+        <div class="subject"><span class="subject-name">Electiva Humanística I</span><span class="sub-type type-el">Electiva</span><span class="subject-credits">3 cr</span></div>
+      </div>
+    </div>
+
+    <div class="semester">
+      <div class="sem-header" onclick="toggleSem(this)">
+        <h4>Semestre III — Ingeniería de Software I</h4>
+        <span class="sem-credits">19 créditos ▾</span>
+      </div>
+      <div class="sem-body">
+        <div class="subject"><span class="subject-name">Análisis y Diseño de Sistemas</span><span class="sub-type type-ob">Obligatoria</span><span class="subject-credits">4 cr</span></div>
+        <div class="subject"><span class="subject-name">Bases de Datos II</span><span class="sub-type type-ob">Obligatoria</span><span class="subject-credits">3 cr</span></div>
+        <div class="subject"><span class="subject-name">Redes y Comunicaciones</span><span class="sub-type type-ob">Obligatoria</span><span class="subject-credits">3 cr</span></div>
+        <div class="subject"><span class="subject-name">Estadística y Probabilidad</span><span class="sub-type type-ob">Obligatoria</span><span class="subject-credits">4 cr</span></div>
+        <div class="subject"><span class="subject-name">Desarrollo Web Frontend</span><span class="sub-type type-ob">Obligatoria</span><span class="subject-credits">5 cr</span></div>
+      </div>
+    </div>
+
+    <div class="semester">
+      <div class="sem-header" onclick="toggleSem(this)">
+        <h4>Semestre IV — Ingeniería de Software II</h4>
+        <span class="sem-credits">19 créditos ▾</span>
+      </div>
+      <div class="sem-body">
+        <div class="subject"><span class="subject-name">Arquitectura de Software</span><span class="sub-type type-ob">Obligatoria</span><span class="subject-credits">4 cr</span></div>
+        <div class="subject"><span class="subject-name">Desarrollo Backend</span><span class="sub-type type-ob">Obligatoria</span><span class="subject-credits">5 cr</span></div>
+        <div class="subject"><span class="subject-name">Calidad y Pruebas de Software</span><span class="sub-type type-ob">Obligatoria</span><span class="subject-credits">3 cr</span></div>
+        <div class="subject"><span class="subject-name">Sistemas Operativos</span><span class="sub-type type-ob">Obligatoria</span><span class="subject-credits">4 cr</span></div>
+        <div class="subject"><span class="subject-name">Electiva Disciplinar I</span><span class="sub-type type-el">Electiva</span><span class="subject-credits">3 cr</span></div>
+      </div>
+    </div>
+
+    <div class="semester">
+      <div class="sem-header" onclick="toggleSem(this)">
+        <h4>Semestre V — DevOps y Metodologías Ágiles</h4>
+        <span class="sem-credits">18 créditos ▸</span>
+      </div>
+      <div class="sem-body" hidden>
+        <div class="subject"><span class="subject-name">Metodologías Ágiles (Scrum/Kanban)</span><span class="sub-type type-ob">Obligatoria</span><span class="subject-credits">4 cr</span></div>
+        <div class="subject"><span class="subject-name">Cloud Computing</span><span class="sub-type type-ob">Obligatoria</span><span class="subject-credits">4 cr</span></div>
+        <div class="subject"><span class="subject-name">Seguridad Informática</span><span class="sub-type type-ob">Obligatoria</span><span class="subject-credits">3 cr</span></div>
+        <div class="subject"><span class="subject-name">Inteligencia Artificial Básica</span><span class="sub-type type-ob">Obligatoria</span><span class="subject-credits">4 cr</span></div>
+        <div class="subject"><span class="subject-name">Electiva Disciplinar II</span><span class="sub-type type-el">Electiva</span><span class="subject-credits">3 cr</span></div>
+      </div>
+    </div>
+
+    <div class="semester">
+      <div class="sem-header" onclick="toggleSem(this)">
+        <h4>Semestre VI — Proyectos y Especialización</h4>
+        <span class="sem-credits">19 créditos ▸</span>
+      </div>
+      <div class="sem-body" hidden>
+        <div class="subject"><span class="subject-name">Gerencia de Proyectos TI</span><span class="sub-type type-ob">Obligatoria</span><span class="subject-credits">4 cr</span></div>
+        <div class="subject"><span class="subject-name">Machine Learning Aplicado</span><span class="sub-type type-ob">Obligatoria</span><span class="subject-credits">5 cr</span></div>
+        <div class="subject"><span class="subject-name">Desarrollo Móvil</span><span class="sub-type type-ob">Obligatoria</span><span class="subject-credits">4 cr</span></div>
+        <div class="subject"><span class="subject-name">Ética y Legislación Informática</span><span class="sub-type type-ob">Obligatoria</span><span class="subject-credits">3 cr</span></div>
+        <div class="subject"><span class="subject-name">Electiva Libre</span><span class="sub-type type-el">Electiva</span><span class="subject-credits">3 cr</span></div>
+      </div>
+    </div>
+
+    <div class="semester">
+      <div class="sem-header" onclick="toggleSem(this)">
+        <h4>Semestre VII — Práctica Empresarial</h4>
+        <span class="sem-credits">18 créditos ▸</span>
+      </div>
+      <div class="sem-body" hidden>
+        <div class="subject"><span class="subject-name">Práctica Empresarial I</span><span class="sub-type type-ob">Obligatoria</span><span class="subject-credits">6 cr</span></div>
+        <div class="subject"><span class="subject-name">Sistemas Distribuidos</span><span class="sub-type type-ob">Obligatoria</span><span class="subject-credits">4 cr</span></div>
+        <div class="subject"><span class="subject-name">Emprendimiento Digital</span><span class="sub-type type-ob">Obligatoria</span><span class="subject-credits">3 cr</span></div>
+        <div class="subject"><span class="subject-name">Electiva Disciplinar III</span><span class="sub-type type-el">Electiva</span><span class="subject-credits">5 cr</span></div>
+      </div>
+    </div>
+
+    <div class="semester">
+      <div class="sem-header" onclick="toggleSem(this)">
+        <h4>Semestre VIII — Proyecto de Grado</h4>
+        <span class="sem-credits">20 créditos ▸</span>
+      </div>
+      <div class="sem-body" hidden>
+        <div class="subject"><span class="subject-name">Proyecto de Grado I</span><span class="sub-type type-ob">Obligatoria</span><span class="subject-credits">8 cr</span></div>
+        <div class="subject"><span class="subject-name">Proyecto de Grado II</span><span class="sub-type type-ob">Obligatoria</span><span class="subject-credits">8 cr</span></div>
+        <div class="subject"><span class="subject-name">Electiva de Profundización</span><span class="sub-type type-el">Electiva</span><span class="subject-credits">4 cr</span></div>
+      </div>
+    </div>
+
+    <div style="height:48px"></div>
+  </div><!-- /panel-pensum -->
+
+  <!-- TAB: PERFIL -->
+  <div class="prog-panel container" id="panel-perfil">
+    <div class="section-header">
+      <p class="eyebrow">Formación integral</p>
+      <h2>Perfil y competencias</h2>
+    </div>
+    <div class="two-col" style="margin-bottom:36px">
+      <div class="info-block">
+        <h3>Perfil de ingreso</h3>
+        <p>El programa está diseñado para personas con:</p>
+        <ul class="info-list">
+          <li>Inclinación hacia las matemáticas y el razonamiento lógico</li>
+          <li>Curiosidad por entender cómo funcionan los sistemas tecnológicos</li>
+          <li>Capacidad para el trabajo autónomo y la autogestión del aprendizaje</li>
+          <li>Disposición para colaborar en equipos virtuales</li>
+          <li>Interés en la resolución creativa de problemas</li>
+        </ul>
+      </div>
+      <div class="info-block">
+        <h3>Perfil de egreso</h3>
+        <p>El egresado estará en capacidad de:</p>
+        <ul class="info-list">
+          <li>Diseñar y construir soluciones de software escalables y de calidad</li>
+          <li>Liderar equipos de desarrollo en entornos ágiles</li>
+          <li>Gestionar proyectos tecnológicos con criterio empresarial</li>
+          <li>Aplicar técnicas de IA y análisis de datos en problemas reales</li>
+          <li>Emprender startups tecnológicas con base sólida</li>
+        </ul>
+      </div>
+    </div>
+    <p class="eyebrow" style="margin-bottom:16px">Competencias específicas</p>
+    <div class="three-col">
+      <div class="comp-card">
+        <h4>Desarrollo de Software</h4>
+        <p>Codificación y prueba de sistemas usando lenguajes modernos y buenas prácticas de ingeniería.</p>
+      </div>
+      <div class="comp-card" style="border-top-color:var(--c-accent)">
+        <h4 style="color:var(--c-accent)">Arquitectura de Sistemas</h4>
+        <p>Arquitecturas robustas, escalables y mantenibles para sistemas de información complejos.</p>
+      </div>
+      <div class="comp-card" style="border-top-color:var(--c-primary)">
+        <h4 style="color:var(--c-primary)">Gestión de Proyectos TI</h4>
+        <p>Planificación y ejecución de proyectos con metodologías ágiles y estándares PMI.</p>
+      </div>
+      <div class="comp-card" style="border-top-color:#7C3AED">
+        <h4 style="color:#7C3AED">Inteligencia Artificial</h4>
+        <p>Machine learning, NLP y redes neuronales aplicados a productos y servicios reales.</p>
+      </div>
+      <div class="comp-card">
+        <h4>Seguridad y Cloud</h4>
+        <p>Soluciones seguras en plataformas cloud (AWS, Azure, GCP) con enfoque DevSecOps.</p>
+      </div>
+      <div class="comp-card" style="border-top-color:var(--c-accent)">
+        <h4 style="color:var(--c-accent)">Emprendimiento Digital</h4>
+        <p>Identificación de oportunidades de negocio tech y construcción de MVPs exitosos.</p>
+      </div>
+    </div>
+    <div style="height:48px"></div>
+  </div><!-- /panel-perfil -->
+
+  <!-- TAB: ADMISIONES -->
+  <div class="prog-panel container" id="panel-admisiones">
+    <div class="section-header">
+      <p class="eyebrow">Proceso de admisión</p>
+      <h2>¿Cómo inscribirse?</h2>
+    </div>
+    <div class="two-col">
+      <div>
+        <div class="adm-step">
+          <div class="step-num">1</div>
+          <div>
+            <h4>Diligenciar el formulario de inscripción</h4>
+            <p>Completa el formulario en línea a través del portal Ucompensar con tus datos personales y académicos.</p>
+          </div>
+        </div>
+        <div class="adm-step">
+          <div class="step-num" style="background:var(--c-accent)">2</div>
+          <div>
+            <h4>Cargar documentos requeridos</h4>
+            <p>Adjunta fotocopia del documento de identidad, diploma o constancia de décimo grado y foto reciente.</p>
+          </div>
+        </div>
+        <div class="adm-step">
+          <div class="step-num" style="background:var(--c-teal)">3</div>
+          <div>
+            <h4>Examen de admisión virtual</h4>
+            <p>Presenta la prueba en línea que evalúa razonamiento matemático, lógico y comprensión lectora.</p>
+          </div>
+        </div>
+        <div class="adm-step">
+          <div class="step-num">4</div>
+          <div>
+            <h4>Carta de aceptación y matrícula</h4>
+            <p>Aprobado el examen, recibirás la carta de aceptación y podrás formalizar tu matrícula.</p>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:20px">
+        <div class="info-box">
+          <h4>Documentos requeridos</h4>
+          <ul class="doc-list">
+            <li><span class="doc-check">✓</span> Fotocopia del documento de identidad (ambas caras)</li>
+            <li><span class="doc-check">✓</span> Diploma de bachiller o constancia de décimo grado</li>
+            <li><span class="doc-check">✓</span> Resultado ICFES (si aplica)</li>
+            <li><span class="doc-check">✓</span> Foto tamaño 3×4 fondo blanco</li>
+            <li><span class="doc-check">✓</span> Pago de derechos de inscripción</li>
+          </ul>
+        </div>
+        <div class="dates-box">
+          <h4>Fechas clave 2025-2</h4>
+          <div class="date-row"><span class="date-lbl">Inicio de inscripciones</span><span class="date-val">15 Jul 2025</span></div>
+          <div class="date-row"><span class="date-lbl">Cierre de inscripciones</span><span class="date-val">05 Sep 2025</span></div>
+          <div class="date-row"><span class="date-lbl">Examen de admisión</span><span class="date-val">12–14 Sep 2025</span></div>
+          <div class="date-row"><span class="date-lbl">Publicación de resultados</span><span class="date-val">22 Sep 2025</span></div>
+          <div class="date-row"><span class="date-lbl">Inicio de clases</span><span class="date-val highlight">29 Sep 2025</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="cta-block">
+      <div>
+        <h3>¡Inscríbete hoy!</h3>
+        <p>Cupos limitados para la cohorte 2025-2. Consulta becas y opciones de financiación Compensar.</p>
+      </div>
+      <a href="#" class="btn-white">Iniciar inscripción</a>
+    </div>
+    <div style="height:48px"></div>
+  </div><!-- /panel-admisiones -->
+
+</div><!-- /page-software -->
+
+<!-- ======================================================
+     FOOTER (siempre visible)
+====================================================== -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-about">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+          <div style="width:34px;height:34px;background:var(--c-accent);display:grid;place-items:center">
+            <span style="font-family:var(--f-head);font-weight:900;font-size:15px;color:white">U</span>
+          </div>
+          <div>
+            <div style="font-family:var(--f-head);font-weight:800;font-size:14px;color:white">UCOMPENSAR</div>
+            <div style="font-size:9px;color:rgba(255,255,255,.45);letter-spacing:.07em;text-transform:uppercase">Fundación Universitaria</div>
+          </div>
+        </div>
+        <p>Formamos profesionales íntegros y competentes para contribuir al desarrollo sostenible de Colombia y el mundo desde Bogotá D.C.</p>
+        <div class="footer-mock-note">Mockup académico — Propuesta de rediseño</div>
+        <div class="social-links">
+          <a href="#" class="social-btn">Fb</a>
+          <a href="#" class="social-btn">In</a>
+          <a href="#" class="social-btn">Tw</a>
+          <a href="#" class="social-btn">Yt</a>
+        </div>
+      </div>
+      <div>
+        <h4>Programas</h4>
+        <ul>
+          <li><a href="#">Pregrado presencial</a></li>
+          <li><a href="#">Pregrado virtual</a></li>
+          <li><a href="#">Tecnologías</a></li>
+          <li><a href="#">Especializaciones</a></li>
+          <li><a href="#">Maestrías</a></li>
+          <li><a href="#">Educación continua</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Institución</h4>
+        <ul>
+          <li><a href="#">Quiénes somos</a></li>
+          <li><a href="#">Misión y visión</a></li>
+          <li><a href="#">Docentes</a></li>
+          <li><a href="#">Investigación</a></li>
+          <li><a href="#">Bienestar universitario</a></li>
+          <li><a href="#">Egresados</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contacto</h4>
+        <ul>
+          <li><a href="#">(+571) 744 7272</a></li>
+          <li><a href="#">contacto@ucompensar.edu.co</a></li>
+          <li><a href="#">Bogotá D.C., Colombia</a></li>
+          <li><a href="#">Sede El Lago — Cra 68</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 Fundación Universitaria Compensar – Ucompensar. Todos los derechos reservados.</span>
+      <span>Trabajo académico · Diseño UX/UI · Mockup interactivo</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ============================================================
+   ROUTING
+============================================================ */
+function showPage(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-menu a[id^="nav-"]').forEach(a => a.classList.remove('active'));
+
+  const target = document.getElementById('page-' + page);
+  if (target) target.classList.add('active');
+
+  const navEl = document.getElementById('nav-' + page);
+  if (navEl) navEl.classList.add('active');
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  document.getElementById('navMenu').classList.remove('open');
+  document.getElementById('navToggle').setAttribute('aria-expanded', 'false');
+}
+
+/* ============================================================
+   PROGRAM TABS
+============================================================ */
+function showTab(btn, panelId) {
+  document.querySelectorAll('.prog-tab').forEach(t => { t.classList.remove('active'); t.setAttribute('aria-selected', 'false'); });
+  document.querySelectorAll('.prog-panel').forEach(p => p.classList.remove('active'));
+
+  btn.classList.add('active');
+  btn.setAttribute('aria-selected', 'true');
+
+  const panel = document.getElementById('panel-' + panelId);
+  if (panel) panel.classList.add('active');
+}
+
+/* ============================================================
+   PENSUM ACCORDION
+============================================================ */
+function toggleSem(header) {
+  const body    = header.nextElementSibling;
+  const credits = header.querySelector('.sem-credits');
+  const isOpen  = !body.hidden;
+
+  body.hidden = isOpen;
+  credits.textContent = credits.textContent.replace(isOpen ? '▾' : '▸', isOpen ? '▸' : '▾');
+}
+
+/* ============================================================
+   PROGRAM FILTER
+============================================================ */
+function filterPrograms(chip, cat) {
+  document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+  chip.classList.add('active');
+
+  document.querySelectorAll('#allPrograms .program-card').forEach(card => {
+    if (cat === 'all') {
+      card.style.display = '';
+    } else {
+      const cats = (card.dataset.cat || '').split(' ');
+      card.style.display = cats.includes(cat) ? '' : 'none';
+    }
+  });
+}
+
+/* ============================================================
+   MOBILE NAV TOGGLE
+============================================================ */
+document.getElementById('navToggle').addEventListener('click', function() {
+  const menu = document.getElementById('navMenu');
+  const open = menu.classList.toggle('open');
+  this.setAttribute('aria-expanded', String(open));
+});
+
+/* ============================================================
+   THEME TOGGLE
+============================================================ */
+const themeBtn = document.getElementById('themeToggle');
+let currentTheme = null;
+
+try { currentTheme = localStorage.getItem('uc-theme'); } catch(e) {}
+if (currentTheme) {
+  document.documentElement.setAttribute('data-theme', currentTheme);
+  themeBtn.textContent = currentTheme === 'dark' ? '☀️' : '🌙';
+}
+
+themeBtn.addEventListener('click', function() {
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  const next = isDark ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  themeBtn.textContent = next === 'dark' ? '☀️' : '🌙';
+  try { localStorage.setItem('uc-theme', next); } catch(e) {}
+});
+
+/* ============================================================
+   KEYBOARD: open card on Enter
+============================================================ */
+document.querySelectorAll('[role="button"]').forEach(el => {
+  el.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); el.click(); }
+  });
+});
+</script>
